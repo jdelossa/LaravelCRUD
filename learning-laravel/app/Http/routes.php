@@ -11,12 +11,20 @@
 |
 */
 
-Route::get('/', 'WelcomeController@index');
+// Bind route parameters
 
-Route::get('home', 'HomeController@index');
+Route::model('medicalpractice', 'MedicalPractice');
 
-Route::controllers([
-	'auth' => 'Auth\AuthController',
-	'password' => 'Auth\PasswordController',
-]);
+// Show pages
+
+Route::get('/', 'MedicalPracticesController@index');
+Route::get('/create', 'MedicalPracticesController@create');
+Route::get('/edit/{medicalpractice}', 'MedicalPracticesController@edit');
+Route::get('/delete/{medicalpractice}', 'MedicalPracticesController@delete');
+
+// Handle form submissions
+
+Route::post('/create', 'MedicalPracticesController@handleCreate');
+Route::post('/edit', 'MedicalPracticesController@handleEdit');
+Route::post('/delete', 'MedicalPracticesController@handleDelete');
 
