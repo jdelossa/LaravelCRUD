@@ -1,48 +1,65 @@
 <?php namespace App\Http\Controllers;
 
-use Illuminate\Foundation\Bus\DispatchesCommands;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use View;
+use Input;
+Use Redirect;
 use App\MedicalPractice;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class MedicalPracticesController extends BaseController
+
+class MedicalPracticesController extends Controller
 {
+    protected $rules = [
+        'name'      => ['required', 'min:3'],
+        'slug'      => ['required'],
+        'phone'     => ['min:10', 'max:10'],
+    ];
+
     public function index()
     {
         // Show a listing of Winthrop Medical Practice Websites
-        $medicalpractice = MedicalPractice::all();
-        return View::make('index', compact('medicalpractice'));
+        $medicalpractices = MedicalPractice::all();
+        return view('medicalpractices.index', compact('medicalpractices'));
     }
 
     public function create()
     {
-        // Show the 'add a medical practice' form
-        return View::make('create');
+        return view('medicalpractices.create');
     }
 
-    public function handleCreate()
+    public function store(Request $request)
     {
-        // Handle create form submission
+        $this->validate($request, $this->rules);
+
+        $input = Input::all();
+        MedicalPractice::create( $input );
+
+        return Redirect::route('medicalpractices.index')->with('message', 'Medical Practice Added');
+
     }
 
-    public function edit(MedicalPractice $medicalpractice)
+    public function show(Medicalpractice $medicalpractice)
     {
-        return View::make('edit');
+        return view('medicalpractices.show', compact('medicalpractice'));
     }
 
-    public function handleEdit()
+    public function edit(Medicalpractice $medicalpractice)
     {
-        // Handle edit form submission
+        return view('medicalpractices.edit', compact('medicalpractice'));
     }
 
-    public function delete()
+    public function update(Medicalpractice $medicalpractice, Request $request)
     {
-        // Show delete confirmation page
-        return View::make('delete');
+        $this->validate($request, $this->rules);
+        $input = array_except(Input::all(), '_method');
+        $medicalpractice->update($input);
+        return Redirect::route('medicalpractices.show', $medicalpractice->slug)->with('message', 'Medicalpractice updated.');
     }
-    public function handleDelete()
+
+    public function destroy(Medicalpractice $medicalpractice)
     {
-        // Handle the delete confirmation
+        $medicalpractice->delete();
+        return Redirect::route('medicalpractices.index')->with('message', 'Medicalpractice deleted.');
     }
+
 }

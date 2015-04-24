@@ -1,16 +1,15 @@
 <?php namespace App;
-/**
- * Created by PhpStorm.
- * User: joanna
- * Date: 4/22/15
- * Time: 2:47 PM
- */
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Model;
 
-// app/models/MedicalPractice.php
+class MedicalPractice extends Model {
 
-class MedicalPractice extends Eloquent
-{
+    protected $table = 'medical_practices';
+    protected $guarded = [];
+
+    public function medicalpractice()
+    {
+        return $this->hasMany('App\MedicalPractice');
+    }
 
 }

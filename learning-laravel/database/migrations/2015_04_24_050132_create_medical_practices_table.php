@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMedicalpracticesTable extends Migration {
+class CreateMedicalPracticesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,14 +12,14 @@ class CreateMedicalpracticesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('medicalpractices', function(Blueprint $table)
+		Schema::create('medical_practices', function(Blueprint $table)
 		{
 			$table->increments('id');
-            $table->string('title');
+            $table->string('name');
+            $table->string('slug');
             $table->string('specialty');
-            $table->string('location');
-            $table->string('website');
-            $table->string('phone');
+            $table->string('website')->unique();
+            $table->integer('phone');
 			$table->timestamps();
 		});
 	}
@@ -31,7 +31,7 @@ class CreateMedicalpracticesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('medicalpractices');
+		Schema::drop('medical_practices');
 	}
 
 }

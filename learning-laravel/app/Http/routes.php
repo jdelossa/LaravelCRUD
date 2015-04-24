@@ -11,20 +11,19 @@
 |
 */
 
-// Bind route parameters
+Route::get('/', 'WelcomeController@index');
 
-Route::model('medicalpractice', 'MedicalPractice');
+//Route::get('home', 'HomeController@index');
+//
+//Route::controllers([
+//	'auth' => 'Auth\AuthController',
+//	'password' => 'Auth\PasswordController',
+//]);
 
-// Show pages
+Route::model('medical-practices', 'MedicalPractice');
 
-Route::get('/', 'MedicalPracticesController@index');
-Route::get('/create', 'MedicalPracticesController@create');
-Route::get('/edit/{medicalpractice}', 'MedicalPracticesController@edit');
-Route::get('/delete/{medicalpractice}', 'MedicalPracticesController@delete');
+Route::bind('medical-practices', function($value, $route) {
+    return App\MedicalPractice::whereSlug($value)->first();
+});
 
-// Handle form submissions
-
-Route::post('/create', 'MedicalPracticesController@handleCreate');
-Route::post('/edit', 'MedicalPracticesController@handleEdit');
-Route::post('/delete', 'MedicalPracticesController@handleDelete');
-
+Route::resource('medical-practices', 'MedicalPracticesController');
